@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KHUSHAL — Cyber Tips</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --muted: #666666;
+      --accent: #00ff88;
+      --danger: #ff4455;
+      --warn: #ff9900;
+      --info: #0099ff;
+      --border: #1a1a1a;
+      --font-head: 'Bebas Neue', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-mono); min-height: 100vh; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.5rem 4rem; background: #000; border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: var(--font-head); font-size: 1.6rem; letter-spacing: 3px; color: var(--accent); text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+
+    .page { max-width: 1100px; margin: 0 auto; padding: 8rem 4rem 5rem; }
+
+    .page-label { font-size: 0.7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+    .page-title { font-family: var(--font-head); font-size: clamp(3rem, 7vw, 5.5rem); line-height: 0.95; margin-bottom: 1.5rem; }
+    .page-title span { color: #333; }
+    .page-intro { font-size: 0.83rem; color: var(--muted); line-height: 1.9; max-width: 580px; margin-bottom: 3.5rem; }
+
+    /* FILTER */
+    .filter-bar { display: flex; gap: 0.6rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
+    .filter-btn {
+      padding: 0.4rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: #000;
+      border: 1px solid #222;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover, .filter-btn.active { border-color: var(--accent); color: var(--accent); }
+
+    /* TIPS */
+    .tips-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+
+    .tip-card {
+      background: #000;
+      padding: 2rem;
+      position: relative;
+      transition: background 0.2s;
+    }
+    .tip-card:hover { background: #060606; }
+
+    .tip-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
+    .tip-num { font-family: var(--font-head); font-size: 2.5rem; color: #111; line-height: 1; }
+    .sev {
+      font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase;
+      padding: 0.25rem 0.6rem; border: 1px solid;
+    }
+    .sev-critical { color: var(--danger); border-color: rgba(255,68,85,0.3); background: rgba(255,68,85,0.07); }
+    .sev-high { color: var(--warn); border-color: rgba(255,153,0,0.3); background: rgba(255,153,0,0.07); }
+    .sev-medium { color: var(--info); border-color: rgba(0,153,255,0.3); background: rgba(0,153,255,0.07); }
+
+    .tip-title { font-family: var(--font-head); font-size: 1.1rem; letter-spacing: 1px; color: var(--text); margin-bottom: 0.8rem; line-height: 1.2; }
+    .tip-body { font-size: 0.75rem; color: var(--muted); line-height: 1.9; }
+
+    .tip-card[data-hidden="true"] { display: none; }
+
+    @media (max-width: 900px) { .tips-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .page { padding: 6rem 1.5rem 3rem; }
+      .tips-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">ABK</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="cyber.html" class="active">Cyber Tips</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+  <p class="page-label">// 02 — cyber tips</p>
+  <h1 class="page-title">STAY <span>SECURE</span></h1>
+  <p class="page-intro">Essential cybersecurity tips everyone should know — whether you're a developer, student, or regular internet user.</p>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterTips('all', this)">All</button>
+    <button class="filter-btn" onclick="filterTips('critical', this)">Critical</button>
+    <button class="filter-btn" onclick="filterTips('high', this)">High</button>
+    <button class="filter-btn" onclick="filterTips('medium', this)">Medium</button>
+    <button class="filter-btn" onclick="filterTips('dev', this)">Dev Only</button>
+  </div>
+
+  <div class="tips-grid" id="tipsGrid">
+    <div class="tip-card" data-sev="critical">
+      <div class="tip-top">
+        <div class="tip-num">01</div>
+        <span class="sev sev-critical">Critical</span>
+      </div>
+      <div class="tip-title">USE STRONG, UNIQUE PASSWORDS</div>
+      <div class="tip-body">Never reuse passwords across sites. Use a password manager like Bitwarden or 1Password to generate and store complex passwords (16+ chars, mixed types). One breach shouldn't compromise all accounts.</div>
+    </div>
+
+    <div class="tip-card" data-sev="critical">
+      <div class="tip-top">
+        <div class="tip-num">02</div>
+        <span class="sev sev-critical">Critical</span>
+      </div>
+      <div class="tip-title">ENABLE TWO-FACTOR AUTH</div>
+      <div class="tip-body">Always enable 2FA on critical accounts (email, banking, GitHub). Prefer authenticator apps over SMS, as SIM-swapping attacks can intercept text messages.</div>
+    </div>
+
+    <div class="tip-card" data-sev="critical">
+      <div class="tip-top">
+        <div class="tip-num">03</div>
+        <span class="sev sev-critical">Critical</span>
+      </div>
+      <div class="tip-title">BEWARE OF PHISHING</div>
+      <div class="tip-body">Phishing remains the #1 attack vector. Verify sender email domains carefully — attackers use lookalike domains. Never click links in unsolicited emails. When in doubt, go directly to the website.</div>
+    </div>
+
+    <div class="tip-card" data-sev="high">
+      <div class="tip-top">
+        <div class="tip-num">04</div>
+        <span class="sev sev-high">High</span>
+      </div>
+      <div class="tip-title">KEEP SOFTWARE UPDATED</div>
+      <div class="tip-body">Most breaches exploit known, patched vulnerabilities. Enable auto-updates for your OS, browser, and apps. This single habit closes the majority of attack surface that attackers rely on.</div>
+    </div>
+
+    <div class="tip-card" data-sev="high">
+      <div class="tip-top">
+        <div class="tip-num">05</div>
+        <span class="sev sev-high">High</span>
+      </div>
+      <div class="tip-title">USE HTTPS EVERYWHERE</div>
+      <div class="tip-body">Only submit sensitive information on HTTPS sites. On public Wi-Fi, use a VPN to encrypt your traffic. Free public hotspots can be used for man-in-the-middle attacks.</div>
+    </div>
+
+    <div class="tip-card" data-sev="critical dev">
+      <div class="tip-top">
+        <div class="tip-num">06</div>
+        <span class="sev sev-critical">Critical · Dev</span>
+      </div>
+      <div class="tip-title">SANITIZE ALL USER INPUT</div>
+      <div class="tip-body">Never trust user input. Validate and sanitize on both client and server. Parameterize all DB queries to prevent SQL injection. Encode output to stop XSS. These top the OWASP Top 10.</div>
+    </div>
+
+    <div class="tip-card" data-sev="high">
+      <div class="tip-top">
+        <div class="tip-num">07</div>
+        <span class="sev sev-high">High</span>
+      </div>
+      <div class="tip-title">PRINCIPLE OF LEAST PRIVILEGE</div>
+      <div class="tip-body">Only grant users and systems the minimum permissions required. Your app's DB user shouldn't have DROP TABLE rights. This limits blast radius when something goes wrong.</div>
+    </div>
+
+    <div class="tip-card" data-sev="critical dev">
+      <div class="tip-top">
+        <div class="tip-num">08</div>
+        <span class="sev sev-critical">Critical · Dev</span>
+      </div>
+      <div class="tip-title">NEVER STORE SECRETS IN CODE</div>
+      <div class="tip-body">API keys, passwords, and tokens must live in environment variables — never hardcoded or committed to Git. Use .env files locally and secret managers in production. Check GitHub history too.</div>
+    </div>
+
+    <div class="tip-card" data-sev="medium">
+      <div class="tip-top">
+        <div class="tip-num">09</div>
+        <span class="sev sev-medium">Medium</span>
+      </div>
+      <div class="tip-title">BACK UP YOUR DATA REGULARLY</div>
+      <div class="tip-body">Follow the 3-2-1 rule: 3 copies of data, on 2 different media, 1 offsite. Ransomware attacks are neutralized when you have clean backups. Test your restore process regularly.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function filterTips(type, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tip-card').forEach(card => {
+      const sev = card.getAttribute('data-sev') || '';
+      if (type === 'all') {
+        card.removeAttribute('data-hidden');
+      } else if (type === 'dev') {
+        card.setAttribute('data-hidden', sev.includes('dev') ? 'false' : 'true');
+        if (sev.includes('dev')) card.removeAttribute('data-hidden');
+        else card.setAttribute('data-hidden', 'true');
+      } else {
+        if (sev.includes(type)) card.removeAttribute('data-hidden');
+        else card.setAttribute('data-hidden', 'true');
+      }
+    });
+  }
+</script>
+</body>
+</html>
